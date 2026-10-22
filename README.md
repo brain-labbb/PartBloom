@@ -103,7 +103,7 @@ python partbloom/run.py doctor
 python -m pytest partbloom/tests -q
 ```
 
-Every resource path can be overridden with `--config my.json` (relative paths resolve against the repository root) or with the `AGENTVOXEL_VENDOR` and `AGENTVOXEL_WEIGHTS` environment variables.
+Every resource path can be overridden with `--config my.json` (relative paths resolve against the repository root) or with the `PARTBLOOM_VENDOR` and `PARTBLOOM_WEIGHTS` environment variables.
 
 ### API
 
@@ -113,7 +113,7 @@ Copy `partbloom/configs/api.example.json` and point it at your provider:
 {
   "protocol": "responses",
   "base_url": "https://your-service.example/v1",
-  "api_key_env": "AGENTVOXEL_API_KEY"
+  "api_key_env": "PARTBLOOM_API_KEY"
 }
 ```
 
@@ -145,3 +145,7 @@ Voxel proxies use +X right, −Y forward and +Z up, on a 0..63 grid. Exported GL
 ## Acknowledgements
 
 PartBloom builds on [TRELLIS](https://github.com/microsoft/TRELLIS). Baseline results use [PhysX-Omni](https://github.com/ziangcao0312/PhysX-Omni), SegviGen and PartLLM.
+
+## License
+
+PartBloom is released under the [MIT License](LICENSE). Its dependencies keep their own licenses: TRELLIS is MIT, and PhysX-Omni, whose TRELLIS implementation PartBloom runs, uses the S-Lab License 1.0, which permits non-commercial use only; commercial use requires contacting its authors.

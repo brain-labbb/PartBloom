@@ -21,7 +21,7 @@ try:
  original=TrellisImageTo3DPipeline.from_pretrained
  TrellisImageTo3DPipeline.from_pretrained=staticmethod(lambda path:original(str(W/'TRELLIS-image-large') if path=='microsoft/TRELLIS-image-large' else path))
  # Optional observation-only snapshots; do not change upstream mesh processing.
- if os.environ.get('AGENTVOXEL_SAVE_MESH_STAGES') == '1':
+ if os.environ.get('PARTBLOOM_SAVE_MESH_STAGES') == '1':
   import trimesh
   from trellis.utils import postprocessing_utils as pp
   stages=a.out/'mesh_stages';stages.mkdir(exist_ok=True)

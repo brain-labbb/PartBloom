@@ -33,7 +33,7 @@ def main():
             'latent_sha256':hashlib.sha256(latent.read_bytes()).hexdigest(),
             'support_sha256':hashlib.sha256((out/'allind.npy').read_bytes()).hexdigest(),
             'labels':'connected growth within existing global components'},indent=2))
-        os.environ['AGENTVOXEL_SAVE_MESH_STAGES']='1'
+        os.environ['PARTBLOOM_SAVE_MESH_STAGES']='1'
         sys.argv=['cached_part_decode.py','--out',str(out),'--retry-failed',
             '--mesh-inner-visibility',str(args.mesh_inner_visibility)]
         runpy.run_path(str(PIPELINE/'cached_part_decode.py'),run_name='__main__')
@@ -155,7 +155,7 @@ def main():
         return [{'mesh': [mesh], 'gaussian': [None]} for mesh in meshes]
 
     TrellisImageTo3DPipeline.run_decoder = run
-    os.environ['AGENTVOXEL_SAVE_MESH_STAGES'] = '1'
+    os.environ['PARTBLOOM_SAVE_MESH_STAGES'] = '1'
     sys.argv = ['official_entry.py', 'decode', '--out', str(out)]
     runpy.run_path(str(PIPELINE/'official_entry.py'), run_name='__main__')
     if len(list((out/'objs').glob('*/*.obj'))) != len(parts):

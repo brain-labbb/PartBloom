@@ -31,7 +31,7 @@ def load_config(path=None):
 
 def environment(config, gpu=None):
     env = os.environ.copy()
-    env.update(AGENTVOXEL_VENDOR=config['vendor'], AGENTVOXEL_WEIGHTS=config['weights'],
+    env.update(PARTBLOOM_VENDOR=config['vendor'], PARTBLOOM_WEIGHTS=config['weights'],
                OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='4', PYTHONUNBUFFERED='1',
                PYTHONPATH=os.pathsep.join([str(PACKAGE), str(PACKAGE / 'pipeline'), env.get('PYTHONPATH', '')]))
     if gpu is not None:
@@ -178,7 +178,7 @@ def main(argv=None):
         experiment = json.loads(experiment_path.read_text())
         experiment['mesh_inner_visibility'] = config['mesh_inner_visibility']
         experiment_path.write_text(json.dumps(experiment, indent=2))
-        env['AGENTVOXEL_SAVE_MESH_STAGES'] = '1'
+        env['PARTBLOOM_SAVE_MESH_STAGES'] = '1'
         invoke('cached_part_decode.py', ['--out', out, '--mesh-inner-visibility',
                config['mesh_inner_visibility']], config, env, gpu=True)
         if config['texture']:

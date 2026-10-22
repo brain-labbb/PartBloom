@@ -28,10 +28,10 @@ def build_visibility_fill(original, threshold):
 
 def install_visibility_repair(threshold=0.):
     from trellis.utils import postprocessing_utils as pp
-    original = getattr(pp,'_agentvoxel_original_fill_holes',pp._fill_holes)
+    original = getattr(pp,'_partbloom_original_fill_holes',pp._fill_holes)
     if threshold == 0:
         pp._fill_holes = original
         return
     replacement = build_visibility_fill(original,threshold)
-    pp._agentvoxel_original_fill_holes = original
+    pp._partbloom_original_fill_holes = original
     pp._fill_holes = replacement

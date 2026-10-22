@@ -1,4 +1,4 @@
-"""Chat-agent bridge for the AgentVoxel coarse stage.
+"""Chat-agent bridge for the PartBloom coarse stage.
 
 Replaces the API Client of pipeline/agent_runner.py with a command-line tool
 that an interactive agent (e.g. a Claude Code subagent) calls directly. The
@@ -142,7 +142,7 @@ def cmd_init(a):
         'reviewer': REVIEWER_INSTRUCTIONS, 'tools': TOOLS,
         'budgets': {'build_max_api_steps': BUILD_STEPS, 'repair_max_api_steps': REPAIR_STEPS,
                     'max_edits_per_call': 15},
-        'transport': 'chat_agent_bridge: tool calls issued via tools/chat_agent_voxel.py, no API client'})
+        'transport': 'chat_agent_bridge: tool calls issued via tools/chat_agent.py, no API client'})
     started = time.time()
     dump(coarse / 'agent_status.json', {
         'model': a.model, 'reasoning_effort': a.reasoning_effort, 'repairs_limit': REPAIRS,
