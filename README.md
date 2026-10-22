@@ -8,7 +8,7 @@
 
 PartBloom is an open-source framework that uses multimodal LLMs to construct part-level voxel proxies, then transforms them into detailed 3D assets through generative diffusion models.
 
-The current release is the **TRELLIS1 version**. A TRELLIS.2 version and rigging are planned.
+The current release is the **TRELLIS1 version**. A TRELLIS.2 version and automatic rigging are planned.
 
 ## Overview
 
@@ -34,7 +34,7 @@ The agent stage is model-agnostic. It talks to the LLM through protocol adapters
 | 🧩 M1 | TRELLIS1 version | MLLM part planning, voxel proxy tools, image-guided structure refinement, shared-SLat per-part decoding, and native texture export | ✅ Done |
 | 📦 M2 | Code release | Pipeline code, prompts, configs and reproduction scripts | 🚧 In progress |
 | 🌸 M3 | TRELLIS.2 version | Port the detail-blooming stage to the TRELLIS.2 backbone | 🔜 Planned |
-| 🦴 M4 | Rigging | Skeletons and skinning for part-level assets, and animation export | 🔜 Planned |
+| 🦴 M4 | Rigging | Rigging demos on three assets (done); automatic skeletons, skinning and animation export for part-level assets (planned) | 🚧 Partial |
 
 > **Status legend:** ✅ Done · 🚧 Partial or in progress · 🔜 Planned
 
@@ -64,7 +64,14 @@ Colors mark parts. SegviGen and PartLLM (general granularity) run with their off
 
 ### Rigging
 
-🔜 Planned. Rigged animations of PartBloom assets will be added here.
+PartBloom outputs one mesh per functional, independently moving part, so its assets can be rigged directly. Each part is bound to a bone without re-generating or re-segmenting the model. The demos below were rigged and animated in Blender on top of the PartBloom part meshes and textures. Click a GIF for the full video.
+
+| Covered Wagon: drive and steer | Mech Boar: run cycle | Mecha: shield charge |
+| :---: | :---: | :---: |
+| [![Covered Wagon](assets/rigging/covered_wagon.gif)](assets/rigging/covered_wagon.mp4) | [![Mech Boar](assets/rigging/mech_boar.gif)](assets/rigging/mech_boar.mp4) | [![Mecha](assets/rigging/mecha.gif)](assets/rigging/mecha.mp4) |
+| PartBloom + Claude Opus 5.5 | PartBloom + GPT-6-Astra | PartBloom + Claude Opus 5.5 |
+
+These are per-asset demos rather than an automatic rigging pipeline, which is still planned (M4).
 
 ## Coordinate convention
 
