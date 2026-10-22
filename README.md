@@ -6,7 +6,7 @@
 
 </div>
 
-PartBloom is an open-source agentic framework that uses LLMs (Gemini-4-Argon, Claude Opus 5.5, GPT-6-Astra) to construct part-level coarse proxies, then transforms them into detailed 3D assets through generative diffusion models. By combining the planning and structure-construction strengths of LLMs with the high-fidelity detail generation of diffusion models, PartBloom points to a possible future for 3D generation.
+PartBloom is an open-source agentic framework that uses LLMs (Gemini-4-Argon, GPT-6-Astra, Claude Opus 5.5) to construct part-level coarse proxies, then transforms them into detailed 3D assets through generative diffusion models. By combining the planning and structure-construction strengths of LLMs with the high-fidelity detail generation of diffusion models, PartBloom points to a possible future for 3D generation.
 
 The current release is the **TRELLIS1 version**.
 
