@@ -40,7 +40,7 @@ The agent stage is model-agnostic. It talks to the LLM through protocol adapters
 
 ## Results
 
-The benchmark has 15 single-image inputs: vehicles, mecha, creatures, statues, furniture, architecture and dioramas. Each cell shows the oblique view of that method's latest finished run.
+The comparison has 14 single-image inputs: vehicles, mecha, creatures, statues, furniture, architecture and dioramas. Each cell shows that method's latest finished run, rendered by the method's own renderer with the same lights and framing on a white background, and turned to roughly match the input view.
 
 ### Image-to-3D comparison
 
@@ -56,7 +56,7 @@ The benchmark has 15 single-image inputs: vehicles, mecha, creatures, statues, f
 
 ### Part decomposition
 
-Colors mark parts. SegviGen and PartLLM (general granularity) run with their official settings (seed 42). PartBloom parts come from the same runs shown in the image-to-3D comparison.
+Colors mark parts. SegviGen and PartLLM (general granularity) run with their official settings (seed 42). PartBloom parts come from the same runs shown in the image-to-3D comparison. All part cells use one shared renderer and palette, and translucent glass for the bottle so its interior stays visible.
 
 ![part comparison 1](assets/parts_01.jpg)
 ![part comparison 2](assets/parts_02.jpg)
@@ -66,31 +66,10 @@ Colors mark parts. SegviGen and PartLLM (general granularity) run with their off
 
 🔜 Planned. Rigged animations of PartBloom assets will be added here.
 
-### Comparison with 3DCodeVerse
-
-3DCodeVerse is an LLM agent that writes, builds, judges and refines Blender code. We compare it with PartBloom separately because it differs from the methods above in time and token cost. Both methods use **GPT-6-Astra with medium reasoning**.
-
-![3DCodeVerse comparison](assets/codeverse_comparison.jpg)
-
-| Asset | Method | LLM stage | Input tokens (cached) | Output tokens | LLM calls | GPU decode + texture | Textured |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Sports Car | 3DCodeVerse | 16.5 min | 112k (4k) | 34.3k | 13 | — | ❌ |
-| Sports Car | **PartBloom** | **6.8 min** | 223k (51k) | **10.1k** | 25 | 2.2 + 5.6 min | ✅ |
-| Mecha | 3DCodeVerse | 15.7 min | 84k (0) | 24.7k | 12 | — | ❌ |
-| Mecha | **PartBloom** | **11.2 min** | 622k (142k) | **16.1k** | 52 | 3.7 + 12.6 min | ✅ |
-
-- **LLM stage**
-  - 3DCodeVerse: wall-clock time of the full harness run (planning, code generation, Blender builds, judging and two refinement rounds).
-  - PartBloom: wall-clock time of the agent stage (planning, voxel building and repair).
-- **Output tokens** include reasoning tokens.
-- **Where PartBloom wins:** it spends 30–60% fewer output tokens and less LLM time.
-- **Where it costs more:** its multi-turn tool use re-sends canvas state, so it uses 2–7× more input tokens.
-- **Bicycle:** 3DCodeVerse ran for 29 minutes and was cut off by an API error before its first judge round finished. PartBloom's agent stage took 10 minutes.
-
 ## Coordinate convention
 
 Voxel proxies use +X right, −Y forward and +Z up, on a 0..63 grid. Exported GLB files follow the standard Y-up convention.
 
 ## Acknowledgements
 
-PartBloom builds on [TRELLIS](https://github.com/microsoft/TRELLIS). Baseline results use [PhysX-Omni](https://github.com/ziangcao0312/PhysX-Omni), SegviGen, PartLLM and 3DCodeVerse with their official settings.
+PartBloom builds on [TRELLIS](https://github.com/microsoft/TRELLIS). Baseline results use [PhysX-Omni](https://github.com/ziangcao0312/PhysX-Omni), SegviGen and PartLLM with their official settings.

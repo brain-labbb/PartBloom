@@ -3,3 +3,5 @@ renders/
 __pycache__/
 assets/*.json
 assets/*_full.jpg
+assets/codeverse_comparison.jpg
+assets/orientation_review.jpg
