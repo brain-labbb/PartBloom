@@ -110,7 +110,7 @@ def resume_manifest_matches(saved, current):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description='Image → Agent voxel parts → guided TRELLIS1 → part meshes')
+    parser = argparse.ArgumentParser(description='Image → Agent voxel parts → guided TRELLIS → part meshes')
     sub = parser.add_subparsers(dest='command', required=True)
     for name in ('run', 'coarse', 'refine', 'redecode', 'texture', 'render', 'doctor'):
         p = sub.add_parser(name)

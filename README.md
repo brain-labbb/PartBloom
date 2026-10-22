@@ -8,7 +8,7 @@
 
 PartBloom is an open-source agentic framework that uses LLMs (Gemini-4-Argon, GPT-6-Astra, Claude Opus 5.5) to construct part-level coarse proxies, then transforms them into detailed 3D assets through generative diffusion models. By combining the planning and structure-construction strengths of LLMs with the high-fidelity detail generation of diffusion models, PartBloom points to a possible future for 3D generation.
 
-The current release is the **TRELLIS1 version**.
+The current release is the **TRELLIS version**.
 
 ## Overview
 
@@ -16,12 +16,12 @@ Given a single image, PartBloom works in two stages:
 
 1. **Structure first: an LLM agent builds a part-level coarse proxy.**
    - A *Planner* looks at the image and chooses the parts. It splits by function and independent motion, and keeps small fixed attachments with the part they belong to.
-   - A *Builder* builds the proxy on a shared 64³ voxel canvas, editing it directly with `polygon`, `brush`, `move` and `clear` tools, one part at a time.
+   - A *Builder* builds the proxy on a shared 64³ voxel canvas, editing it directly with `polygon`, `brush`, `move` and `clear` tools (drawing tools can also erase), one part at a time.
    - A *Reviewer* compares renders of the proxy with the input image. It triggers up to two whole-object repair rounds.
 2. **Details bloom: a generative diffusion model turns the proxy into a detailed 3D asset.**
    - The proxy surface is dilated into a thin support band and encoded by the TRELLIS sparse-structure VAE. It is then partially noised (t = 0.65) and refined by 12 image-guided denoising steps (CFG 5).
    - Part labels are transferred to the refined structure. One structured latent (SLat) is sampled for the whole object.
-   - Each part is decoded from its own slice of the shared SLat. This yields one mesh per part that stays consistent with the rest of the object.
+   - Each part is decoded from its own slice of the shared SLat. This yields one mesh per part that stays consistent with the rest of the object. An alternative `joint` decode mode decodes the whole SLat at once and splits the high-resolution features by part.
    - Textures come from TRELLIS's own Gaussian decoder and texture baking. The output is a textured GLB for every part plus an assembled GLB.
 
 The agent stage is model-agnostic. It talks to the LLM through protocol adapters (`responses`, `generate_content`, `anthropic`, `chat_completions`), so switching to another provider only takes a config change. Results below use Gemini-4-Argon (medium), GPT-6-Astra (medium) and Claude Opus 5.5 (high).
@@ -31,10 +31,10 @@ The agent stage is model-agnostic. It talks to the LLM through protocol adapters
 | Phase | Milestone | Deliverables | Status |
 | --- | --- | --- | --- |
 | 🚀 M0 | Project launch | This repository and qualitative comparisons | ✅ Done |
-| 🧩 M1 | TRELLIS1 version | LLM part planning, coarse-proxy building tools, image-guided structure refinement, shared-SLat per-part decoding, and native texture export | ✅ Done |
+| 🧩 M1 | TRELLIS version | LLM part planning, coarse-proxy building tools, image-guided structure refinement, shared-SLat per-part decoding, and native texture export | ✅ Done |
 | 📦 M2 | Code release | Pipeline code, prompts and configs | ✅ Done |
-| 🌸 M3 | TRELLIS.2 version | Port the detail-blooming stage to the TRELLIS.2 backbone | 🔜 Planned |
-| 🦴 M4 | Rigging | Skeletons, skinning and animation for part-level assets | 🚧 In progress |
+| 🦴 M3 | Rigging | Skeletons, skinning and animation for part-level assets | 🚧 In progress |
+| 🌸 M4 | TRELLIS.2 version | Port the detail-blooming stage to the TRELLIS.2 backbone | 🔜 Planned |
 
 > **Status legend:** ✅ Done · 🚧 Partial or in progress · 🔜 Planned
 
@@ -46,7 +46,7 @@ The benchmark has 14 single-image inputs: vehicles, mecha, creatures, statues, f
 
 | Method | Description |
 | --- | --- |
-| PhysX-Omni | Official fine-tuned VLM predicts voxels, which are decoded by TRELLIS (seed 1) |
+| PhysX-Omni | Official fine-tuned VLM directly predicts a voxel structure, which is decoded by TRELLIS (seed 1) |
 | Direct Blender | An agent looks at the image and writes Blender Python directly: Gemini-4-Argon (Antigravity CLI), GPT-6-Astra (Codex), Claude Opus 5.5 (Claude Code) |
 | **PartBloom** | Ours, with Gemini-4-Argon (medium), GPT-6-Astra (medium) and Claude Opus 5.5 (high) |
 
@@ -56,7 +56,7 @@ The benchmark has 14 single-image inputs: vehicles, mecha, creatures, statues, f
 
 ### Part decomposition
 
-Colors mark parts. PartLLM uses its general granularity.
+PartBloom generates part-level assets natively, so we also compare its parts with dedicated part segmentation methods, SegviGen and PartLLM, which split a 3D asset into parts. Colors mark parts. PartLLM uses its general granularity.
 
 ![part comparison 1](assets/parts_01.jpg)
 ![part comparison 2](assets/parts_02.jpg)
@@ -131,7 +131,7 @@ python partbloom/run.py run \
 # Individual stages
 python partbloom/run.py coarse   --image IMG --api-config API --out OUT       # agent stage only
 python partbloom/run.py refine   --source OUT/coarse --out OUT2 --gpu 0       # refinement from a coarse proxy
-python partbloom/run.py redecode --source OUT/refined --out OUT3 --decode-mode joint --gpu 0
+python partbloom/run.py redecode --source OUT/refined --out OUT3 --decode-mode joint --gpu 0   # re-decode the shared SLat (parts | joint)
 python partbloom/run.py texture  --source OUT/refined --out OUT/textured --gpu 0
 python partbloom/run.py render   --source OUT/refined/objs --out parts.png
 ```
@@ -144,7 +144,7 @@ Coarse proxies are 64³ voxel grids (indices 0..63) with +X right, −Y forward 
 
 ## Acknowledgements
 
-PartBloom builds on [TRELLIS](https://github.com/microsoft/TRELLIS). Baseline results use [PhysX-Omni](https://github.com/ziangcao0312/PhysX-Omni), SegviGen and PartLLM.
+PartBloom builds on [TRELLIS](https://github.com/microsoft/TRELLIS). Baselines include [PhysX-Omni](https://github.com/ziangcao0312/PhysX-Omni), Direct Blender agents, SegviGen and PartLLM.
 
 ## License
 
