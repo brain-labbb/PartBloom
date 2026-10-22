@@ -1,0 +1,5 @@
+scripts/
+renders/
+__pycache__/
+assets/*.json
+assets/*_full.jpg
