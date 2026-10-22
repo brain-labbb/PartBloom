@@ -1,0 +1,5 @@
+{
+  "protocol": "responses",
+  "base_url": "https://your-service.example/v1",
+  "api_key_env": "AGENTVOXEL_API_KEY"
+}

@@ -1,0 +1,17 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "repairs": 2,
+  "max_api_steps": 10,
+  "repair_max_api_steps": 20,
+  "decode_mode": "parts",
+  "noise_time": 0.65,
+  "steps": 12,
+  "mesh_inner_visibility": 0.01,
+  "python_gpu": ".venv/bin/python",
+  "vendor": "vendor",
+  "weights": "weights",
+  "blender": "blender",
+  "texture": true,
+  "texture_size": 1024
+}
