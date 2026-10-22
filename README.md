@@ -14,9 +14,9 @@ The current release is the **TRELLIS1 version**.
 
 Given a single image, PartBloom works in two stages:
 
-1. **Structure first: a multimodal LLM agent builds a part-level voxel proxy.**
+1. **Structure first: an LLM agent builds a part-level coarse proxy.**
    - A *Planner* looks at the image and chooses the parts. It splits by function and independent motion, and keeps small fixed attachments with the part they belong to.
-   - A *Builder* edits a shared 64³ voxel canvas directly with `polygon`, `brush`, `move` and `clear` tools, one part at a time.
+   - A *Builder* builds the proxy on a shared 64³ voxel canvas, editing it directly with `polygon`, `brush`, `move` and `clear` tools, one part at a time.
    - A *Reviewer* compares renders of the proxy with the input image. It triggers up to two whole-object repair rounds.
 2. **Details bloom: a generative diffusion model turns the proxy into a detailed 3D asset.**
    - The proxy surface is dilated into a thin support band and encoded by the TRELLIS sparse-structure VAE. It is then partially noised (t = 0.65) and refined by 12 image-guided denoising steps (CFG 5).
@@ -31,7 +31,7 @@ The agent stage is model-agnostic. It talks to the LLM through protocol adapters
 | Phase | Milestone | Deliverables | Status |
 | --- | --- | --- | --- |
 | 🚀 M0 | Project launch | This repository and qualitative comparisons | ✅ Done |
-| 🧩 M1 | TRELLIS1 version | MLLM part planning, voxel proxy tools, image-guided structure refinement, shared-SLat per-part decoding, and native texture export | ✅ Done |
+| 🧩 M1 | TRELLIS1 version | LLM part planning, coarse-proxy building tools, image-guided structure refinement, shared-SLat per-part decoding, and native texture export | ✅ Done |
 | 📦 M2 | Code release | Pipeline code, prompts and configs | ✅ Done |
 | 🌸 M3 | TRELLIS.2 version | Port the detail-blooming stage to the TRELLIS.2 backbone | 🔜 Planned |
 | 🦴 M4 | Rigging | Skeletons, skinning and animation for part-level assets | 🚧 In progress |
@@ -47,7 +47,7 @@ The benchmark has 14 single-image inputs: vehicles, mecha, creatures, statues, f
 | Method | Description |
 | --- | --- |
 | PhysX-Omni | Official fine-tuned VLM predicts voxels, which are decoded by TRELLIS (seed 1) |
-| Direct Blender | An agent looks at the image and writes Blender Python directly: Argon (Antigravity CLI), Astra (Codex), Opus 5.5 (Claude Code) |
+| Direct Blender | An agent looks at the image and writes Blender Python directly: Gemini-4-Argon (Antigravity CLI), GPT-6-Astra (Codex), Claude Opus 5.5 (Claude Code) |
 | **PartBloom** | Ours, with Gemini-4-Argon (medium), GPT-6-Astra (medium) and Claude Opus 5.5 (high) |
 
 ![image-to-3D comparison 1](assets/comparison_01.jpg)
@@ -122,25 +122,25 @@ Copy `partbloom/configs/api.example.json` and point it at your provider:
 ### Run
 
 ```bash
-# Full pipeline: agent voxel proxy -> guided refinement -> per-part decoding -> textures
+# Full pipeline: agent coarse proxy -> guided refinement -> per-part decoding -> textures
 python partbloom/run.py run \
   --image path/to/image.png \
   --api-config my_api.json --model claude-opus-5-5 --reasoning-effort high \
-  --out outputs/chair --gpu 0
+  --out outputs/my_asset --gpu 0
 
 # Individual stages
 python partbloom/run.py coarse   --image IMG --api-config API --out OUT       # agent stage only
-python partbloom/run.py refine   --source OUT/coarse --out OUT2 --gpu 0       # refinement from a voxel proxy
+python partbloom/run.py refine   --source OUT/coarse --out OUT2 --gpu 0       # refinement from a coarse proxy
 python partbloom/run.py redecode --source OUT/refined --out OUT3 --decode-mode joint --gpu 0
 python partbloom/run.py texture  --source OUT/refined --out OUT/textured --gpu 0
 python partbloom/run.py render   --source OUT/refined/objs --out parts.png
 ```
 
-A full run writes `coarse/` (voxel proxy, prompts and API logs), `refined/` (refined structure, shared SLat and per-part meshes), `textured/` (per-part textured GLBs and `assembly_textured.glb`) and `parts.png`. Add `--resume` to skip completed stages of the same run.
+A full run writes `coarse/` (coarse proxy, prompts and API logs), `refined/` (refined structure, shared SLat and per-part meshes), `textured/` (per-part textured GLBs and `assembly_textured.glb`) and `parts.png`. Add `--resume` to skip completed stages of the same run.
 
 ## Coordinate convention
 
-Voxel proxies use +X right, −Y forward and +Z up, on a 0..63 grid. Exported GLB files follow the standard Y-up convention.
+Coarse proxies are 64³ voxel grids (indices 0..63) with +X right, −Y forward and +Z up. Exported GLB files follow the standard Y-up convention.
 
 ## Acknowledgements
 
