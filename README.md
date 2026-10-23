@@ -55,7 +55,7 @@ The benchmark has 14 single-image inputs: vehicles, mecha, creatures, statues, f
 
 ### Part decomposition
 
-PartBloom generates part-level assets natively, so we also compare its parts with dedicated part segmentation methods, SegviGen and PartLLM, which split a 3D asset into parts. Colors mark parts. PartLLM uses its general granularity.
+PartBloom generates part-level assets natively. For the two segmentation baselines, TRELLIS first generates a 3D asset from the input image; SegviGen or PartLLM then splits that asset into parts. We label these pipelines **TRELLIS + SegviGen** and **TRELLIS + PartLLM**. Colors mark parts. PartLLM uses its general granularity.
 
 ![part comparison 1](assets/parts_01.jpg)
 ![part comparison 2](assets/parts_02.jpg)
