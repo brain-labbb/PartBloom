@@ -85,6 +85,8 @@ pip install -r partbloom/requirements-cpu.txt
 python partbloom/run.py doctor
 ```
 
+6. Copy `partbloom/configs/api.example.json`, fill in your provider URL and API key, and pass it with `--api-config`.
+
 ### Run
 
 ```bash
