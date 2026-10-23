@@ -57,9 +57,9 @@ The benchmark has 14 single-image inputs: vehicles, mecha, creatures, statues, f
 
 PartBloom generates part-level assets natively. For the two segmentation baselines, TRELLIS first generates a 3D asset from the input image; SegviGen or PartLLM then splits that asset into parts. We label these pipelines **TRELLIS + SegviGen** and **TRELLIS + PartLLM**. Colors mark parts. PartLLM uses its general granularity.
 
-![part comparison 1](assets/parts_01.jpg)
-![part comparison 2](assets/parts_02.jpg)
-![part comparison 3](assets/parts_03.jpg)
+![part comparison 1](assets/parts_white_01.jpg)
+![part comparison 2](assets/parts_white_02.jpg)
+![part comparison 3](assets/parts_white_03.jpg)
 
 ### Rigging
 
