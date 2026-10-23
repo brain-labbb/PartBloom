@@ -138,10 +138,6 @@ python partbloom/run.py render   --source OUT/refined/objs --out parts.png
 
 A full run writes `coarse/` (coarse proxy, prompts and API logs), `refined/` (refined structure, shared SLat and per-part meshes), `textured/` (per-part textured GLBs and `assembly_textured.glb`) and `parts.png`. Add `--resume` to skip completed stages of the same run.
 
-## Coordinate convention
-
-Coarse proxies are 64³ voxel grids (indices 0..63) with +X right, −Y forward and +Z up. Exported GLB files follow the standard Y-up convention.
-
 ## Acknowledgements
 
 PartBloom builds on [TRELLIS](https://github.com/microsoft/TRELLIS). Baselines include [PhysX-Omni](https://github.com/ziangcao0312/PhysX-Omni), Direct Blender agents, SegviGen and PartLLM.
