@@ -85,20 +85,6 @@ pip install -r partbloom/requirements-cpu.txt
 python partbloom/run.py doctor
 ```
 
-### API config
-
-Copy `partbloom/configs/api.example.json` and fill in your provider:
-
-```json
-{
-  "protocol": "responses",
-  "base_url": "https://your-service.example/v1",
-  "api_key_env": "PARTBLOOM_API_KEY"
-}
-```
-
-`protocol` is one of `responses`, `generate_content`, `anthropic` or `chat_completions`.
-
 ### Run
 
 ```bash
